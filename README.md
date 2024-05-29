@@ -53,13 +53,7 @@ $ python2 -c <span class="pl-s"><span class="pl-pds">'</span>import urllib; prin
 String to encode: <span class="pl-en">FAKEpassword!#$%&amp;'</span>()<span class="pl-k">*</span>+,/:;=<span class="pl-k">?</span>@[]
 FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
 $</pre><div class="zeroclipboard-container">
-    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="$ python3 -c 'import urllib.parse; print(urllib.parse.quote(input(&quot;String to encode: &quot;), &quot;&quot;))'
-String to encode: FAKEpassword!#$%&amp;'()*+,/:;=?@[]
-FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
-$ python2 -c 'import urllib; print urllib.quote(raw_input(&quot;String to encode: &quot;), &quot;&quot;)'
-String to encode: FAKEpassword!#$%&amp;'()*+,/:;=?@[]
-FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
-$" tabindex="0" role="button">
+   
       <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
 </svg>
@@ -135,18 +129,7 @@ $" tabindex="0" role="button">
         <span class="pl-s">"postgres://localhost:5432/database?sslmode=enable"</span>)
     <span class="pl-s1">m</span>.<span class="pl-en">Steps</span>(<span class="pl-c1">2</span>)
 }</pre><div class="zeroclipboard-container">
-    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="import (
-    &quot;github.com/golang-migrate/migrate/v4&quot;
-    _ &quot;github.com/golang-migrate/migrate/v4/database/postgres&quot;
-    _ &quot;github.com/golang-migrate/migrate/v4/source/github&quot;
-)
-
-func main() {
-    m, err := migrate.New(
-        &quot;github://mattes:personal-access-token@mattes/migrate_test&quot;,
-        &quot;postgres://localhost:5432/database?sslmode=enable&quot;)
-    m.Steps(2)
-}" tabindex="0" role="button">
+  
       <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
 </svg>
@@ -172,22 +155,7 @@ func main() {
         <span class="pl-s">"postgres"</span>, <span class="pl-s1">driver</span>)
     <span class="pl-s1">m</span>.<span class="pl-en">Up</span>() <span class="pl-c">// or m.Step(2) if you want to explicitly set the number of migrations to run</span>
 }</pre><div class="zeroclipboard-container">
-    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="import (
-    &quot;database/sql&quot;
-    _ &quot;github.com/lib/pq&quot;
-    &quot;github.com/golang-migrate/migrate/v4&quot;
-    &quot;github.com/golang-migrate/migrate/v4/database/postgres&quot;
-    _ &quot;github.com/golang-migrate/migrate/v4/source/file&quot;
-)
-
-func main() {
-    db, err := sql.Open(&quot;postgres&quot;, &quot;postgres://localhost:5432/database?sslmode=enable&quot;)
-    driver, err := postgres.WithInstance(db, &amp;postgres.Config{})
-    m, err := migrate.NewWithDatabaseInstance(
-        &quot;file:///migrations&quot;,
-        &quot;postgres&quot;, driver)
-    m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
-}" tabindex="0" role="button">
+   
       <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
 </svg>
