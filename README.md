@@ -1,196 +1,261 @@
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/golang-migrate/migrate/ci.yaml?branch=master)](https://github.com/golang-migrate/migrate/actions/workflows/ci.yaml?query=branch%3Amaster)
-[![GoDoc](https://pkg.go.dev/badge/github.com/golang-migrate/migrate)](https://pkg.go.dev/github.com/golang-migrate/migrate/v4)
-[![Coverage Status](https://img.shields.io/coveralls/github/golang-migrate/migrate/master.svg)](https://coveralls.io/github/golang-migrate/migrate?branch=master)
-[![packagecloud.io](https://img.shields.io/badge/deb-packagecloud.io-844fec.svg)](https://packagecloud.io/golang-migrate/migrate?filter=debs)
-[![Docker Pulls](https://img.shields.io/docker/pulls/migrate/migrate.svg)](https://hub.docker.com/r/migrate/migrate/)
-![Supported Go Versions](https://img.shields.io/badge/Go-1.21%2C%201.22-lightgrey.svg)
-[![GitHub Release](https://img.shields.io/github/release/golang-migrate/migrate.svg)](https://github.com/golang-migrate/migrate/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/golang-migrate/migrate/v4)](https://goreportcard.com/report/github.com/golang-migrate/migrate/v4)
-
-# migrate
-
-__Database migrations written in Go. Use as [CLI](#cli-usage) or import as [library](#use-in-your-go-project).__
-
-* Migrate reads migrations from [sources](#migration-sources)
-   and applies them in correct order to a [database](#databases).
-* Drivers are "dumb", migrate glues everything together and makes sure the logic is bulletproof.
-   (Keeps the drivers lightweight, too.)
-* Database drivers don't assume things or try to correct user input. When in doubt, fail.
-
-Forked from [mattes/migrate](https://github.com/mattes/migrate)
-
-## Databases
-
-Database drivers run migrations. [Add a new database?](database/driver.go)
-
-* [PostgreSQL](database/postgres)
-* [PGX v4](database/pgx)
-* [PGX v5](database/pgx/v5)
-* [Redshift](database/redshift)
-* [Ql](database/ql)
-* [Cassandra / ScyllaDB](database/cassandra)
-* [SQLite](database/sqlite)
-* [SQLite3](database/sqlite3) ([todo #165](https://github.com/mattes/migrate/issues/165))
-* [SQLCipher](database/sqlcipher)
-* [MySQL / MariaDB](database/mysql)
-* [Neo4j](database/neo4j)
-* [MongoDB](database/mongodb)
-* [CrateDB](database/crate) ([todo #170](https://github.com/mattes/migrate/issues/170))
-* [Shell](database/shell) ([todo #171](https://github.com/mattes/migrate/issues/171))
-* [Google Cloud Spanner](database/spanner)
-* [CockroachDB](database/cockroachdb)
-* [YugabyteDB](database/yugabytedb)
-* [ClickHouse](database/clickhouse)
-* [Firebird](database/firebird)
-* [MS SQL Server](database/sqlserver)
-* [rqlite](database/rqlite)
-
-### Database URLs
-
-Database connection strings are specified via URLs. The URL format is driver dependent but generally has the form: `dbdriver://username:password@host:port/dbname?param1=true&param2=false`
-
-Any [reserved URL characters](https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_reserved_characters) need to be escaped. Note, the `%` character also [needs to be escaped](https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_the_percent_character)
-
-Explicitly, the following characters need to be escaped:
-`!`, `#`, `$`, `%`, `&`, `'`, `(`, `)`, `*`, `+`, `,`, `/`, `:`, `;`, `=`, `?`, `@`, `[`, `]`
-
-It's easiest to always run the URL parts of your DB connection URL (e.g. username, password, etc) through an URL encoder. See the example Python snippets below:
-
-```bash
-$ python3 -c 'import urllib.parse; print(urllib.parse.quote(input("String to encode: "), ""))'
-String to encode: FAKEpassword!#$%&'()*+,/:;=?@[]
+<div class="Box-sc-g0xbh4-0 bJMeLZ js-snippet-clipboard-copy-unpositioned" data-hpc="true"><article class="markdown-body entry-content container-lg" itemprop="text"><p dir="auto"><a href="https://github.com/golang-migrate/migrate/actions/workflows/ci.yaml?query=branch%3Amaster"><img src="https://camo.githubusercontent.com/5ba96c248d87397dbbd5d528de465e90c4bea4e118efa3197d4e470f21d8ca73/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f616374696f6e732f776f726b666c6f772f7374617475732f676f6c616e672d6d6967726174652f6d6967726174652f63692e79616d6c3f6272616e63683d6d6173746572" alt="GitHub 工作流状态（分支）" data-canonical-src="https://img.shields.io/github/actions/workflow/status/golang-migrate/migrate/ci.yaml?branch=master" style="max-width: 100%;"></a>
+<a href="https://pkg.go.dev/github.com/golang-migrate/migrate/v4" rel="nofollow"><img src="https://camo.githubusercontent.com/5e242a022eee057584714db2e0fe5b0e29473e0efbfbdd8cb7eb995143b685c4/68747470733a2f2f706b672e676f2e6465762f62616467652f6769746875622e636f6d2f676f6c616e672d6d6967726174652f6d696772617465" alt="戈多克" data-canonical-src="https://pkg.go.dev/badge/github.com/golang-migrate/migrate" style="max-width: 100%;"></a>
+<a href="https://coveralls.io/github/golang-migrate/migrate?branch=master" rel="nofollow"><img src="https://camo.githubusercontent.com/ae2e69c058da13cd5c6819a23aa0eb6415edb2e656b9d8e472270b90330b46c0/68747470733a2f2f696d672e736869656c64732e696f2f636f766572616c6c732f6769746875622f676f6c616e672d6d6967726174652f6d6967726174652f6d61737465722e737667" alt="覆盖状态" data-canonical-src="https://img.shields.io/coveralls/github/golang-migrate/migrate/master.svg" style="max-width: 100%;"></a>
+<a href="https://packagecloud.io/golang-migrate/migrate?filter=debs" rel="nofollow"><img src="https://camo.githubusercontent.com/130e20540ee9a341eef2d0d76e5b82a47d02cf9c47a45000b60c18b4cc58bb5f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6465622d7061636b616765636c6f75642e696f2d3834346665632e737667" alt="packagecloud.io" data-canonical-src="https://img.shields.io/badge/deb-packagecloud.io-844fec.svg" style="max-width: 100%;"></a>
+<a href="https://hub.docker.com/r/migrate/migrate/" rel="nofollow"><img src="https://camo.githubusercontent.com/e764d7ba393858429dfe4f082d1c76d852815481af3650f6abd94aebbe39af11/68747470733a2f2f696d672e736869656c64732e696f2f646f636b65722f70756c6c732f6d6967726174652f6d6967726174652e737667" alt="Docker 拉取" data-canonical-src="https://img.shields.io/docker/pulls/migrate/migrate.svg" style="max-width: 100%;"></a>
+<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/35e1c8ee14f73006b23769aac9228684bf2fc18c68a6afe6bc0962000bde3a3a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f2d312e3231253243253230312e32322d6c69676874677265792e737667"><img src="https://camo.githubusercontent.com/35e1c8ee14f73006b23769aac9228684bf2fc18c68a6afe6bc0962000bde3a3a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476f2d312e3231253243253230312e32322d6c69676874677265792e737667" alt="支持的 Go 版本" data-canonical-src="https://img.shields.io/badge/Go-1.21%2C%201.22-lightgrey.svg" style="max-width: 100%;"></a>
+<a href="https://github.com/golang-migrate/migrate/releases"><img src="https://camo.githubusercontent.com/6d86d604e44b191195b4a35ef201e8e1de1e741def499b937438b5658cdd96bc/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f72656c656173652f676f6c616e672d6d6967726174652f6d6967726174652e737667" alt="GitHub 发布" data-canonical-src="https://img.shields.io/github/release/golang-migrate/migrate.svg" style="max-width: 100%;"></a>
+<a href="https://goreportcard.com/report/github.com/golang-migrate/migrate/v4" rel="nofollow"><img src="https://camo.githubusercontent.com/c5e840e8090391ce3ed257799439f63d3ce344bc611134bf52621b34ea99e436/68747470733a2f2f676f7265706f7274636172642e636f6d2f62616467652f6769746875622e636f6d2f676f6c616e672d6d6967726174652f6d6967726174652f7634" alt="围棋成绩单" data-canonical-src="https://goreportcard.com/badge/github.com/golang-migrate/migrate/v4" style="max-width: 100%;"></a></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">迁移</font></font></h1><a id="user-content-migrate" class="anchor" aria-label="永久链接：迁移" href="#migrate"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用 Go 编写的数据库迁移。用作</font></font><a href="#cli-usage"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CLI</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或作为</font></font><a href="#use-in-your-go-project"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">库</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">导入。</font></font></strong></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">迁移从</font></font><a href="#migration-sources"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">源</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">读取迁移
+并按照正确的顺序将其应用到</font></font><a href="#databases"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据库</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">驱动程序很“笨”，迁移将所有东西粘合在一起，确保逻辑万无一失。（同时保持驱动程序轻量。）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据库驱动程序不会假设或尝试纠正用户输入。如有疑问，则失败。</font></font></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从</font></font><a href="https://github.com/mattes/migrate"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">mattes/migrate分叉</font></font></a></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据库</font></font></h2><a id="user-content-databases" class="anchor" aria-label="永久链接：数据库" href="#databases"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据库驱动程序运行迁移。</font></font><a href="/golang-migrate/migrate/blob/master/database/driver.go"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加新数据库？</font></font></a></p>
+<ul dir="auto">
+<li><a href="/golang-migrate/migrate/blob/master/database/postgres"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PostgreSQL</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/pgx"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PGX v4</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/pgx/v5"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PGX v5</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/redshift"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">红移</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/ql"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">质量</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/cassandra"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cassandra / ScyllaDB</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/sqlite"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SQLite</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/sqlite3"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SQLite3</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（</font></font><a href="https://github.com/mattes/migrate/issues/165" data-hovercard-type="issue" data-hovercard-url="/mattes/migrate/issues/165/hovercard"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">待办事项 #165</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/sqlcipher"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SQL密码</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/mysql"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MySQL / MariaDB</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/neo4j"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Neo4j</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/mongodb"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MongoDB</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/crate"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CrateDB</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（</font></font><a href="https://github.com/mattes/migrate/issues/170" data-hovercard-type="issue" data-hovercard-url="/mattes/migrate/issues/170/hovercard"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">待办事项 #170</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/shell"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Shell</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（</font></font><a href="https://github.com/mattes/migrate/issues/171" data-hovercard-type="issue" data-hovercard-url="/mattes/migrate/issues/171/hovercard"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">待办事项 #171</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/spanner"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">谷歌云扳手</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/cockroachdb"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">蟑螂数据库</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/yugabytedb"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">尤加字节数据库</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/clickhouse"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ClickHouse</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/firebird"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">火鸟</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/sqlserver"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">微软 SQL 服务器</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/rqlite"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">精英</font></font></a></li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据库 URL</font></font></h3><a id="user-content-database-urls" class="anchor" aria-label="永久链接：数据库 URL" href="#database-urls"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数据库连接字符串通过 URL 指定。URL 格式取决于驱动程序，但通常具有以下形式：</font></font><code>dbdriver://username:password@host:port/dbname?param1=true&amp;param2=false</code></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">任何</font></font><a href="https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_reserved_characters" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保留的 URL 字符</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">都需要转义。请注意，该</font></font><code>%</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">字符也</font></font><a href="https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_the_percent_character" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">需要转义</font></font></a></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">明确</font><font style="vertical-align: inherit;">地</font><font style="vertical-align: inherit;">说</font><font style="vertical-align: inherit;">，</font><font style="vertical-align: inherit;">以下
+</font><font style="vertical-align: inherit;">字符</font><font style="vertical-align: inherit;">需要</font><font style="vertical-align: inherit;">转义</font><font style="vertical-align: inherit;">：</font></font><code>!</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，，，，，，，，，，，，，，，，，，，，，，</font></font><code>#</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font><font style="vertical-align: inherit;">&ZeroWidthSpace;</font></font><code>$</code><font style="vertical-align: inherit;"></font><code>%</code><font style="vertical-align: inherit;"></font><code>&amp;</code><font style="vertical-align: inherit;"></font><code>'</code><font style="vertical-align: inherit;"></font><code>(</code><font style="vertical-align: inherit;"></font><code>)</code><font style="vertical-align: inherit;"></font><code>*</code><font style="vertical-align: inherit;"></font><code>+</code><font style="vertical-align: inherit;"></font><code>,</code><font style="vertical-align: inherit;"></font><code>/</code><font style="vertical-align: inherit;"></font><code>:</code><font style="vertical-align: inherit;"></font><code>;</code><font style="vertical-align: inherit;"></font><code>=</code><font style="vertical-align: inherit;"></font><code>?</code><font style="vertical-align: inherit;"></font><code>@</code><font style="vertical-align: inherit;"></font><code>[</code><font style="vertical-align: inherit;"></font><code>]</code></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">最简单的方法是始终通过 URL 编码器运行数据库连接 URL 的 URL 部分（例如用户名、密码等）。请参阅下面的示例 Python 代码片段：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>$ python3 -c <span class="pl-s"><span class="pl-pds">'</span>import urllib.parse; print(urllib.parse.quote(input("String to encode: "), ""))<span class="pl-pds">'</span></span>
+String to encode: <span class="pl-en">FAKEpassword!#$%&amp;'</span>()<span class="pl-k">*</span>+,/:;=<span class="pl-k">?</span>@[]
 FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
-$ python2 -c 'import urllib; print urllib.quote(raw_input("String to encode: "), "")'
-String to encode: FAKEpassword!#$%&'()*+,/:;=?@[]
+$ python2 -c <span class="pl-s"><span class="pl-pds">'</span>import urllib; print urllib.quote(raw_input("String to encode: "), "")<span class="pl-pds">'</span></span>
+String to encode: <span class="pl-en">FAKEpassword!#$%&amp;'</span>()<span class="pl-k">*</span>+,/:;=<span class="pl-k">?</span>@[]
 FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
-$
-```
+$</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="$ python3 -c 'import urllib.parse; print(urllib.parse.quote(input(&quot;String to encode: &quot;), &quot;&quot;))'
+String to encode: FAKEpassword!#$%&amp;'()*+,/:;=?@[]
+FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
+$ python2 -c 'import urllib; print urllib.quote(raw_input(&quot;String to encode: &quot;), &quot;&quot;)'
+String to encode: FAKEpassword!#$%&amp;'()*+,/:;=?@[]
+FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
+$" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">迁移来源</font></font></h2><a id="user-content-migration-sources" class="anchor" aria-label="永久链接：迁移来源" href="#migration-sources"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">源驱动程序从本地或远程源读取迁移。</font></font><a href="/golang-migrate/migrate/blob/master/source/driver.go"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加新源？</font></font></a></p>
+<ul dir="auto">
+<li><a href="/golang-migrate/migrate/blob/master/source/file"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件系统</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">-从文件系统读取</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/iofs"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">io/fs</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 从 Go </font></font><a href="https://pkg.go.dev/io/fs#FS" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">io/fs读取</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/go_bindata"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Go-Bindata-</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从嵌入的二进制数据读取（</font></font><a href="https://github.com/jteeuwen/go-bindata"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">jteeuwen/go-bindata</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/pkger"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">pkger-</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">读取嵌入的二进制数据（</font></font><a href="https://github.com/markbates/pkger"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">markbates/pkger</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/github"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">GitHub</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 从远程 GitHub 存储库读取</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/github_ee"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">GitHub Enterprise</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 从远程 GitHub Enterprise 存储库读取</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/bitbucket"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Bitbucket-</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从远程 Bitbucket 存储库读取</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/gitlab"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Gitlab-</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从远程 Gitlab 存储库读取</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/aws_s3"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AWS S3</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 从 Amazon Web Services S3 读取</font></font></li>
+<li><a href="/golang-migrate/migrate/blob/master/source/google_cloud_storage"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Google Cloud Storage</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 从 Google Cloud Platform Storage 读取</font></font></li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CLI 使用</font></font></h2><a id="user-content-cli-usage" class="anchor" aria-label="永久链接：CLI 使用方法" href="#cli-usage"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这个库的简单包装。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">优雅地处理 ctrl+c (SIGINT)。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">没有配置搜索路径，没有配置文件，没有神奇的 ENV var 注入。</font></font></li>
+</ul>
+<p dir="auto"><strong><a href="/golang-migrate/migrate/blob/master/cmd/migrate"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CLI 文档</font></font></a></strong></p>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">基本用法</font></font></h3><a id="user-content-basic-usage" class="anchor" aria-label="永久链接：基本用法" href="#basic-usage"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>$ migrate -source file://path/to/migrations -database postgres://localhost:5432/database up 2</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="$ migrate -source file://path/to/migrations -database postgres://localhost:5432/database up 2" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docker 使用</font></font></h3><a id="user-content-docker-usage" class="anchor" aria-label="永久链接：Docker 使用方法" href="#docker-usage"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>$ docker run -v {{ migration dir }}:/migrations --network host migrate/migrate
+    -path=/migrations/ -database postgres://localhost:5432/database up 2</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="$ docker run -v {{ migration dir }}:/migrations --network host migrate/migrate
+    -path=/migrations/ -database postgres://localhost:5432/database up 2" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在你的 Go 项目中使用</font></font></h2><a id="user-content-use-in-your-go-project" class="anchor" aria-label="永久链接：在你的 Go 项目中使用" href="#use-in-your-go-project"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此版本 (v3 和 v4) 的 API 稳定且冻结。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用</font></font><a href="https://golang.org/cmd/go/#hdr-Modules__module_versions__and_more" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Go 模块</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">来管理依赖项。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为了帮助防止数据库损坏，它支持通过 正常停止</font></font><code>GracefulStop chan bool</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">带上您自己的记录器。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">内部使用</font></font><code>io.Reader</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">流来降低内存开销。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">线程安全，无 goroutine 泄漏。</font></font></li>
+</ul>
+<p dir="auto"><strong><a href="https://pkg.go.dev/github.com/golang-migrate/migrate/v4" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Go 文档</font></font></a></strong></p>
+<div class="highlight highlight-source-go notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> (
+    <span class="pl-s">"github.com/golang-migrate/migrate/v4"</span>
+    _ <span class="pl-s">"github.com/golang-migrate/migrate/v4/database/postgres"</span>
+    _ <span class="pl-s">"github.com/golang-migrate/migrate/v4/source/github"</span>
+)
 
-## Migration Sources
-
-Source drivers read migrations from local or remote sources. [Add a new source?](source/driver.go)
-
-* [Filesystem](source/file) - read from filesystem
-* [io/fs](source/iofs) - read from a Go [io/fs](https://pkg.go.dev/io/fs#FS)
-* [Go-Bindata](source/go_bindata) - read from embedded binary data ([jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata))
-* [pkger](source/pkger) - read from embedded binary data ([markbates/pkger](https://github.com/markbates/pkger))
-* [GitHub](source/github) - read from remote GitHub repositories
-* [GitHub Enterprise](source/github_ee) - read from remote GitHub Enterprise repositories
-* [Bitbucket](source/bitbucket) - read from remote Bitbucket repositories
-* [Gitlab](source/gitlab) - read from remote Gitlab repositories
-* [AWS S3](source/aws_s3) - read from Amazon Web Services S3
-* [Google Cloud Storage](source/google_cloud_storage) - read from Google Cloud Platform Storage
-
-## CLI usage
-
-* Simple wrapper around this library.
-* Handles ctrl+c (SIGINT) gracefully.
-* No config search paths, no config files, no magic ENV var injections.
-
-__[CLI Documentation](cmd/migrate)__
-
-### Basic usage
-
-```bash
-$ migrate -source file://path/to/migrations -database postgres://localhost:5432/database up 2
-```
-
-### Docker usage
-
-```bash
-$ docker run -v {{ migration dir }}:/migrations --network host migrate/migrate
-    -path=/migrations/ -database postgres://localhost:5432/database up 2
-```
-
-## Use in your Go project
-
-* API is stable and frozen for this release (v3 & v4).
-* Uses [Go modules](https://golang.org/cmd/go/#hdr-Modules__module_versions__and_more) to manage dependencies.
-* To help prevent database corruptions, it supports graceful stops via `GracefulStop chan bool`.
-* Bring your own logger.
-* Uses `io.Reader` streams internally for low memory overhead.
-* Thread-safe and no goroutine leaks.
-
-__[Go Documentation](https://pkg.go.dev/github.com/golang-migrate/migrate/v4)__
-
-```go
-import (
-    "github.com/golang-migrate/migrate/v4"
-    _ "github.com/golang-migrate/migrate/v4/database/postgres"
-    _ "github.com/golang-migrate/migrate/v4/source/github"
+<span class="pl-k">func</span> <span class="pl-en">main</span>() {
+    <span class="pl-s1">m</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">migrate</span>.<span class="pl-en">New</span>(
+        <span class="pl-s">"github://mattes:personal-access-token@mattes/migrate_test"</span>,
+        <span class="pl-s">"postgres://localhost:5432/database?sslmode=enable"</span>)
+    <span class="pl-s1">m</span>.<span class="pl-en">Steps</span>(<span class="pl-c1">2</span>)
+}</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="import (
+    &quot;github.com/golang-migrate/migrate/v4&quot;
+    _ &quot;github.com/golang-migrate/migrate/v4/database/postgres&quot;
+    _ &quot;github.com/golang-migrate/migrate/v4/source/github&quot;
 )
 
 func main() {
     m, err := migrate.New(
-        "github://mattes:personal-access-token@mattes/migrate_test",
-        "postgres://localhost:5432/database?sslmode=enable")
+        &quot;github://mattes:personal-access-token@mattes/migrate_test&quot;,
+        &quot;postgres://localhost:5432/database?sslmode=enable&quot;)
     m.Steps(2)
-}
-```
+}" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">想要使用现有的数据库客户端吗？</font></font></p>
+<div class="highlight highlight-source-go notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-k">import</span> (
+    <span class="pl-s">"database/sql"</span>
+    _ <span class="pl-s">"github.com/lib/pq"</span>
+    <span class="pl-s">"github.com/golang-migrate/migrate/v4"</span>
+    <span class="pl-s">"github.com/golang-migrate/migrate/v4/database/postgres"</span>
+    _ <span class="pl-s">"github.com/golang-migrate/migrate/v4/source/file"</span>
+)
 
-Want to use an existing database client?
-
-```go
-import (
-    "database/sql"
-    _ "github.com/lib/pq"
-    "github.com/golang-migrate/migrate/v4"
-    "github.com/golang-migrate/migrate/v4/database/postgres"
-    _ "github.com/golang-migrate/migrate/v4/source/file"
+<span class="pl-k">func</span> <span class="pl-en">main</span>() {
+    <span class="pl-s1">db</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">sql</span>.<span class="pl-en">Open</span>(<span class="pl-s">"postgres"</span>, <span class="pl-s">"postgres://localhost:5432/database?sslmode=enable"</span>)
+    <span class="pl-s1">driver</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">postgres</span>.<span class="pl-en">WithInstance</span>(<span class="pl-s1">db</span>, <span class="pl-c1">&amp;</span>postgres.<span class="pl-smi">Config</span>{})
+    <span class="pl-s1">m</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">migrate</span>.<span class="pl-en">NewWithDatabaseInstance</span>(
+        <span class="pl-s">"file:///migrations"</span>,
+        <span class="pl-s">"postgres"</span>, <span class="pl-s1">driver</span>)
+    <span class="pl-s1">m</span>.<span class="pl-en">Up</span>() <span class="pl-c">// or m.Step(2) if you want to explicitly set the number of migrations to run</span>
+}</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="import (
+    &quot;database/sql&quot;
+    _ &quot;github.com/lib/pq&quot;
+    &quot;github.com/golang-migrate/migrate/v4&quot;
+    &quot;github.com/golang-migrate/migrate/v4/database/postgres&quot;
+    _ &quot;github.com/golang-migrate/migrate/v4/source/file&quot;
 )
 
 func main() {
-    db, err := sql.Open("postgres", "postgres://localhost:5432/database?sslmode=enable")
-    driver, err := postgres.WithInstance(db, &postgres.Config{})
+    db, err := sql.Open(&quot;postgres&quot;, &quot;postgres://localhost:5432/database?sslmode=enable&quot;)
+    driver, err := postgres.WithInstance(db, &amp;postgres.Config{})
     m, err := migrate.NewWithDatabaseInstance(
-        "file:///migrations",
-        "postgres", driver)
+        &quot;file:///migrations&quot;,
+        &quot;postgres&quot;, driver)
     m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
-}
-```
-
-## Getting started
-
-Go to [getting started](GETTING_STARTED.md)
-
-## Tutorials
-
-* [CockroachDB](database/cockroachdb/TUTORIAL.md)
-* [PostgreSQL](database/postgres/TUTORIAL.md)
-
-(more tutorials to come)
-
-## Migration files
-
-Each migration has an up and down migration. [Why?](FAQ.md#why-two-separate-files-up-and-down-for-a-migration)
-
-```bash
-1481574547_create_users_table.up.sql
-1481574547_create_users_table.down.sql
-```
-
-[Best practices: How to write migrations.](MIGRATIONS.md)
-
-## Coming from another db migration tool?
-
-Check out [migradaptor](https://github.com/musinit/migradaptor/).
-*Note: migradaptor is not affiliated or supported by this project*
-
-## Versions
-
-Version | Supported? | Import | Notes
---------|------------|--------|------
-**master** | :white_check_mark: | `import "github.com/golang-migrate/migrate/v4"` | New features and bug fixes arrive here first |
-**v4** | :white_check_mark: | `import "github.com/golang-migrate/migrate/v4"` | Used for stable releases |
-**v3** | :x: | `import "github.com/golang-migrate/migrate"` (with package manager) or `import "gopkg.in/golang-migrate/migrate.v3"` (not recommended) | **DO NOT USE** - No longer supported |
-
-## Development and Contributing
-
-Yes, please! [`Makefile`](Makefile) is your friend,
-read the [development guide](CONTRIBUTING.md).
-
-Also have a look at the [FAQ](FAQ.md).
-
----
-
-Looking for alternatives? [https://awesome-go.com/#database](https://awesome-go.com/#database).
+}" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">入门</font></font></h2><a id="user-content-getting-started" class="anchor" aria-label="永久链接：入门指南" href="#getting-started"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">转到</font></font><a href="/golang-migrate/migrate/blob/master/GETTING_STARTED.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">入门</font></font></a></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">教程</font></font></h2><a id="user-content-tutorials" class="anchor" aria-label="永久链接：教程" href="#tutorials"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><a href="/golang-migrate/migrate/blob/master/database/cockroachdb/TUTORIAL.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">蟑螂数据库</font></font></a></li>
+<li><a href="/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PostgreSQL</font></font></a></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（接下来会有更多教程）</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">迁移文件</font></font></h2><a id="user-content-migration-files" class="anchor" aria-label="永久链接：迁移文件" href="#migration-files"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">每次迁移都有上行和下行迁移，</font></font><a href="/golang-migrate/migrate/blob/master/FAQ.md#why-two-separate-files-up-and-down-for-a-migration"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为什么？</font></font></a></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>1481574547_create_users_table.up.sql
+1481574547_create_users_table.down.sql</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="1481574547_create_users_table.up.sql
+1481574547_create_users_table.down.sql" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><a href="/golang-migrate/migrate/blob/master/MIGRATIONS.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">最佳实践：如何编写迁移。</font></font></a></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">来自另一个数据库迁移工具？</font></font></h2><a id="user-content-coming-from-another-db-migration-tool" class="anchor" aria-label="永久链接：来自另一个数据库迁移工具？" href="#coming-from-another-db-migration-tool"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">查看</font></font><a href="https://github.com/musinit/migradaptor/"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">migradaptor</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。
+</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：migradaptor 与该项目无关联，亦不受该项目支持</font></font></em></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版本</font></font></h2><a id="user-content-versions" class="anchor" aria-label="固定链接：版本" href="#versions"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<table>
+<thead>
+<tr>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版本</font></font></th>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支持的？</font></font></th>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">进口</font></font></th>
+<th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">笔记</font></font></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">掌握</font></font></strong></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">✅</font></font></td>
+<td><code>import "github.com/golang-migrate/migrate/v4"</code></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">新功能和错误修复将首先发布在这里</font></font></td>
+</tr>
+<tr>
+<td><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">v4</font></font></strong></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">✅</font></font></td>
+<td><code>import "github.com/golang-migrate/migrate/v4"</code></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于稳定版本</font></font></td>
+</tr>
+<tr>
+<td><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">v3</font></font></strong></td>
+<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">❌</font></font></td>
+<td><code>import "github.com/golang-migrate/migrate"</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（使用包管理器）或</font></font><code>import "gopkg.in/golang-migrate/migrate.v3"</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（不推荐）</font></font></td>
+<td><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请勿使用</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 不再支持</font></font></td>
+</tr>
+</tbody>
+</table>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">开发和贡献</font></font></h2><a id="user-content-development-and-contributing" class="anchor" aria-label="固定链接：开发和贡献" href="#development-and-contributing"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是的，请！</font></font><a href="/golang-migrate/migrate/blob/master/Makefile"><code>Makefile</code></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是你的朋友，阅读</font></font><a href="/golang-migrate/migrate/blob/master/CONTRIBUTING.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">开发指南</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">另请查看</font></font><a href="/golang-migrate/migrate/blob/master/FAQ.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">常见问题解答</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<hr>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">寻找替代方案？</font></font><a href="https://awesome-go.com/#database" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">https://awesome-go.com/#database</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+</article></div>
